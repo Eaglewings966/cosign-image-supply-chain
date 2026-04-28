@@ -1,0 +1,21 @@
+# Terraform state — never commit
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/terraform.tfvars
+terraform/.terraformrc
+terraform/crash.log
+
+# SBOM output
+*.spdx.json
+sbom.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp

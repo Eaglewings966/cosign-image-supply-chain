@@ -1,0 +1,27 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8sblocklatestimage
+  annotations:
+    description: Blocks images using the :latest tag.
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sBlockLatestImage
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8sblocklatestimage
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          endswith(container.image, ":latest")
+          msg := sprintf("Image '%v' uses ':latest' tag which is not allowed.", [container.image])
+        }
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          not contains(container.image, ":")
+          msg := sprintf("Image '%v' has no tag — implicit ':latest' is not allowed.", [container.image])
+        }

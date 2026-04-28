@@ -1,0 +1,30 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: verify-image-signatures
+  annotations:
+    policies.kyverno.io/title: Verify Image Signatures
+    policies.kyverno.io/description: >
+      Blocks any pod whose image has not been signed by Cosign keyless
+      signing via Sigstore. Signature is verified against Rekor's
+      transparency log using the GitHub Actions OIDC issuer.
+spec:
+  validationFailureAction: Enforce
+  background: false
+  rules:
+    - name: check-image-signature
+      match:
+        any:
+          - resources:
+              kinds: [Pod]
+              namespaces: [demo-app]
+      verifyImages:
+        - imageReferences:
+            - "*"
+          attestors:
+            - entries:
+                - keyless:
+                    subject: "https://github.com/Eaglewings966/cosign-image-supply-chain/*"
+                    issuer: "https://token.actions.githubusercontent.com"
+                    rekor:
+                      url: https://rekor.sigstore.dev

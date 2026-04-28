@@ -1,0 +1,37 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8srequiredsignedimages
+  annotations:
+    description: >
+      Requires all container images to come from an approved registry,
+      acting as a second enforcement layer alongside Kyverno.
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sRequiredSignedImages
+      validation:
+        openAPIV3Schema:
+          type: object
+          properties:
+            allowedRegistries:
+              type: array
+              items:
+                type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8srequiredsignedimages
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          image := container.image
+          not approved_registry(image)
+          msg := sprintf("Image '%v' is not from an approved registry.", [image])
+        }
+
+        approved_registry(image) {
+          registry := input.parameters.allowedRegistries[_]
+          startswith(image, registry)
+        }

@@ -1,0 +1,25 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: disallow-latest-tag
+  annotations:
+    policies.kyverno.io/title: Disallow Latest Tag
+    policies.kyverno.io/description: >
+      Requires images to use a specific tag, not :latest, to ensure
+      image provenance is traceable and reproducible.
+spec:
+  validationFailureAction: Audit
+  background: true
+  rules:
+    - name: check-image-tag
+      match:
+        any:
+          - resources:
+              kinds: [Pod]
+              namespaces: [demo-app]
+      validate:
+        message: "Image tag ':latest' is not allowed. Use a specific digest or version tag."
+        pattern:
+          spec:
+            containers:
+              - image: "!*:latest"

@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo-app
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: demo-app
+  namespace: demo-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-app
+  namespace: demo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-app
+  template:
+    metadata:
+      labels:
+        app: demo-app
+    spec:
+      serviceAccountName: demo-app
+      containers:
+        - name: demo-app
+          # Replace with your signed ECR image after pipeline runs
+          image: YOUR_ECR_REGISTRY/devops-demo-app:latest
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+      securityContext:
+        runAsNonRoot: true

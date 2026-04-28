@@ -1,0 +1,16 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredSignedImages
+metadata:
+  name: require-approved-registry
+spec:
+  enforcementAction: deny
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    namespaces: ["demo-app"]
+  parameters:
+    allowedRegistries:
+      # Replace with your actual ECR registry prefix
+      - "YOUR_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com"
+      - "ghcr.io/eaglewings966"
