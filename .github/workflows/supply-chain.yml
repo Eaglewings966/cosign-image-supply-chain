@@ -60,8 +60,9 @@ jobs:
         run: |
           ECR_IMAGE="${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}"
           ECR_LATEST="${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest"
-          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
-          GHCR_LATEST="ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest"
+          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          GHCR_IMAGE="ghcr.io/${OWNER}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
+          GHCR_LATEST="ghcr.io/${OWNER}/${{ env.IMAGE_NAME }}:latest"
           echo "ecr_image=${ECR_IMAGE}" >> $GITHUB_OUTPUT
           echo "ecr_latest=${ECR_LATEST}" >> $GITHUB_OUTPUT
           echo "ghcr_image=${GHCR_IMAGE}" >> $GITHUB_OUTPUT
