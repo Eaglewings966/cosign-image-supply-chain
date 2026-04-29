@@ -12,7 +12,7 @@ permissions:
   packages: write   # required for ghcr.io push
 
 env:
-  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+  ECR_REPOSITORY: devops-demo-app
   IMAGE_NAME: devops-demo-app
 
 jobs:
