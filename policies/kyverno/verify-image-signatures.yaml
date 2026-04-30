@@ -21,6 +21,10 @@ spec:
       verifyImages:
         - imageReferences:
             - "*"
+          imageRegistryCredentials:
+            secrets:
+              - ecr-credentials
+            allowInsecureRegistry: false
           attestors:
             - entries:
                 - keyless:

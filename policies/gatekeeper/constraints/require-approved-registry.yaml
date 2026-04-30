@@ -12,5 +12,5 @@ spec:
   parameters:
     allowedRegistries:
       # Replace with your actual ECR registry prefix
-      - "YOUR_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com"
+      - "061083040518.dkr.ecr.us-east-1.amazonaws.com"
       - "ghcr.io/eaglewings966"

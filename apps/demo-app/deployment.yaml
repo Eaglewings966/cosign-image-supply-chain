@@ -28,7 +28,7 @@ spec:
       containers:
         - name: demo-app
           # Replace with your signed ECR image after pipeline runs
-          image: YOUR_ECR_REGISTRY/devops-demo-app:latest
+          image: 061083040518.dkr.ecr.us-east-1.amazonaws.com/devops-demo-app@sha256:6032212c5e2704fd017ac09ba2251e929da682bad5bca0260b5591eb67a2dc19
           ports:
             - containerPort: 8080
           resources:
